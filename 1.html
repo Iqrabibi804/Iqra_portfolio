@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iqra Bibi · Web Developer · Flutter Developer</title>
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- 9 Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;600&family=Clash+Display:wght@400;600;700&family=Space+Grotesk:wght@400;500;600&family=Montserrat:wght@400;600;700;800&family=Poppins:wght@400;600;700&family=Playfair+Display:wght@400;700;900&family=Roboto+Mono:wght@400;600&family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <style>
+    /* ========== CYBERPUNK BACKGROUND ========== */
+    :root {
+      --primary: #00ff9d;
+      --secondary: #00b8ff;
+      --accent: #ff00e5;
+      --dark: #0a0a0f;
+      --darker: #050507;
+      --light: #ffffff;
+      --gradient-1: linear-gradient(135deg, #00ff9d, #00b8ff, #ff00e5);
+      --gradient-2: linear-gradient(45deg, #ff00e5, #00ff9d);
+      --gradient-3: radial-gradient(circle at 30% 50%, #00ff9d, #00b8ff, #ff00e5);
+      --shadow-neon: 0 0 20px rgba(0, 255, 157, 0.5),
+                     0 0 40px rgba(0, 184, 255, 0.3),
+                     0 0 60px rgba(255, 0, 229, 0.2);
+    }
+
+    /* Animated Background Grid */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 255, 157, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 184, 255, 0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: -1;
+      animation: gridMove 20s linear infinite;
+    }
+
+    /* Particle Canvas */
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Floating 3D Shapes */
+    .floating-shape-3d {
+      position: fixed;
+      width: 200px;
+      height: 200px;
+      background: var(--gradient-1);
+      border-radius: 50%;
+      filter: blur(50px);
+      opacity: 0.15;
+      animation: shapeFloat 15s ease-in-out infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .shape-1 {
+      top: 10%;
+      left: 5%;
+      animation-delay: 0s;
+    }
+
+    .shape-2 {
+      bottom: 10%;
+      right: 5%;
+      width: 300px;
+      height: 300px;
+      animation-delay: -5s;
+    }
+
+    .shape-3 {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+      height: 400px;
+      animation-delay: -10s;
+    }
+
+    /* 3D Cursor */
+    .cursor-3d {
+      width: 30px;
+      height: 30px;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: difference;
+      transition: all 0.1s ease;
+      box-shadow: var(--shadow-neon);
+      animation: cursorPulse 2s infinite;
+    }
+
+    .cursor-3d::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 5px;
+      height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 20px var(--accent);
+    }
+
+    /* ========== NORDIC STYLES (SAME) ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0a0a0f;
+      font-family: 'Inter', sans-serif;
+      color: #eaf6f8;
+      line-height: 1.6;
+      overflow-x: hidden;
+      transition: background 0.4s, color 0.3s, font-family 0.3s;
+    }
+
+    /* 3D Canvas - Disabled (using cyberpunk background instead) */
+    #canvas-container {
+      display: none;
+    }
+
+    /* Main glass portal */
+    .page {
+      position: relative;
+      z-index: 30;
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 3.5rem 3.8rem;
+      background: rgba(6, 22, 26, 0.7);
+      backdrop-filter: blur(16px);
+      border-radius: 80px 80px 0 0;
+      border: 1px solid rgba(0, 230, 230, 0.25);
+      min-height: 100vh;
+    }
+
+    /* ========== HAMBURGER ========== */
+    .hamburger-btn {
+      position: fixed;
+      top: 35px;
+      right: 35px;
+      width: 85px;
+      height: 85px;
+      background: #1a5858;
+      color: #e0ffff;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      cursor: pointer;
+      z-index: 1001;
+      box-shadow: 0 0 40px rgba(0, 255, 255, 0.4);
+      border: 3px solid rgba(140, 255, 255, 0.8);
+      transition: 0.4s;
+      transform: translateZ(60px) rotateX(4deg);
+    }
+
+    .hamburger-btn:hover {
+      transform: translateZ(110px) scale(1.2);
+      background: #2a7a7a;
+      box-shadow: 0 0 80px #00ffff;
+    }
+
+    .settings-btn {
+      position: fixed;
+      top: 140px;
+      right: 35px;
+      width: 85px;
+      height: 85px;
+      background: #0f3a40;
+      color: white;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      cursor: pointer;
+      z-index: 1001;
+      border: 3px solid #aaffff;
+      transition: 0.4s;
+    }
+
+    .settings-btn:hover {
+      background: #1f6a6a;
+      transform: rotate(180deg) scale(1.25);
+      box-shadow: 0 0 70px cyan;
+    }
+
+    /* ========== SIDEBAR ========== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -550px;
+      width: 420px;
+      height: 100vh;
+      background: rgba(4, 28, 32, 0.98);
+      backdrop-filter: blur(60px);
+      border-right: 6px solid #2bc2c2;
+      box-shadow: 0 0 150px rgba(0, 255, 255, 0.3);
+      z-index: 2000;
+      padding: 4rem 3rem;
+      transition: left 0.7s;
+      border-radius: 0 90px 90px 0;
+      overflow-y: auto;
+    }
+
+    .sidebar.open {
+      left: 0;
+    }
+
+    .sidebar-logo {
+      font-size: 4rem;
+      font-weight: 900;
+      color: #b3ffff;
+      letter-spacing: 14px;
+      margin-bottom: 4rem;
+      border-bottom: 6px solid #2bc2c2;
+      display: inline-block;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+    }
+
+    .sidebar-menu li {
+      margin-bottom: 2.5rem;
+      font-size: 1.9rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 1.8rem;
+      color: #d6f7ff;
+      transition: 0.35s;
+      cursor: pointer;
+      padding: 1.2rem 1.8rem;
+      border-radius: 40px;
+    }
+
+    .sidebar-menu li i {
+      width: 48px;
+      color: #5fe0e0;
+      font-size: 2.2rem;
+    }
+
+    .sidebar-menu li:hover {
+      background: rgba(0, 200, 200, 0.2);
+      transform: translateX(20px);
+    }
+
+    .close-sidebar {
+      position: sticky;
+      top: 0;
+      text-align: right;
+      font-size: 2.8rem;
+      cursor: pointer;
+      color: #b3ffff;
+      margin-bottom: 1rem;
+    }
+
+    /* ========== SETTINGS PANEL ========== */
+    .settings-panel {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      width: 950px;
+      max-height: 80vh;
+      overflow-y: auto;
+      background: rgba(4, 35, 40, 0.98);
+      backdrop-filter: blur(80px);
+      border: 5px solid #2bc2c2;
+      border-radius: 70px;
+      padding: 3.5rem;
+      z-index: 3000;
+      box-shadow: 0 0 250px cyan;
+      visibility: hidden;
+      opacity: 0;
+      transition: 0.5s;
+      color: white;
+    }
+
+    .settings-panel.show {
+      visibility: visible;
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .settings-panel h3 {
+      font-size: 2.8rem;
+      margin-bottom: 2.5rem;
+      color: #b0ffff;
+      border-left: 14px solid #2bc2c2;
+      padding-left: 2rem;
+    }
+
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(9, 1fr);
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .color-dot {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 16px;
+      cursor: pointer;
+      border: 3px solid white;
+      transition: 0.2s;
+    }
+
+    .color-dot:hover {
+      transform: scale(1.2);
+      box-shadow: 0 0 30px cyan;
+    }
+
+    .font-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .font-option {
+      padding: 1rem;
+      border: 2px solid #2bc2c2;
+      border-radius: 40px;
+      cursor: pointer;
+      text-align: center;
+      transition: 0.2s;
+    }
+
+    .font-option:hover,
+    .font-option.selected {
+      background: #2bc2c2;
+      color: #021013;
+    }
+
+    .close-settings-btn {
+      background: #2bc2c2;
+      border: none;
+      color: #021013;
+      padding: 1.5rem;
+      width: 100%;
+      font-weight: 900;
+      border-radius: 60px;
+      font-size: 1.6rem;
+      cursor: pointer;
+      margin-top: 2rem;
+    }
+
+    /* ========== SKILL MODAL ========== */
+    .skill-modal-3d {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotateY(10deg) scale(0.9);
+      width: 900px;
+      background: rgba(2, 30, 35, 0.98);
+      backdrop-filter: blur(70px);
+      border: 5px solid #36f0f0;
+      border-radius: 90px;
+      padding: 4rem;
+      z-index: 4000;
+      box-shadow: 0 0 200px cyan;
+      visibility: hidden;
+      opacity: 0;
+      transition: 0.5s;
+      color: white;
+    }
+
+    .skill-modal-3d.show {
+      visibility: visible;
+      opacity: 1;
+      transform: translate(-50%, -50%) rotateY(0deg) scale(1);
+    }
+
+    .skill-modal-3d h2 {
+      font-size: 4rem;
+      color: #bfffff;
+      border-bottom: 6px solid #2bc2c2;
+      display: inline-block;
+      margin-bottom: 2.5rem;
+    }
+
+    .skill-grid-3d {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+
+    .skill-cube {
+      background: rgba(30, 100, 100, 0.25);
+      border: 2px solid #2bc2c2;
+      border-radius: 60px;
+      padding: 2rem;
+      transition: 0.3s;
+    }
+
+    .skill-cube:hover {
+      transform: translateZ(30px) scale(1.05);
+      background: rgba(0, 200, 200, 0.2);
+      box-shadow: 0 0 70px cyan;
+    }
+
+    .skill-cube h3 {
+      font-size: 2rem;
+      color: #a8ffff;
+      margin-bottom: 1rem;
+    }
+
+    .skill-cube ul {
+      list-style: none;
+    }
+
+    .skill-cube li {
+      font-size: 1.4rem;
+      margin-bottom: 0.6rem;
+      padding-left: 1rem;
+      border-left: 5px solid cyan;
+    }
+
+    /* ========== PROJECT MODAL WITH IMAGE/VIDEO SLIDER ========== */
+    .project-detail-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotateY(10deg) scale(0.9);
+      width: 1100px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: rgba(2, 30, 35, 0.98);
+      backdrop-filter: blur(70px);
+      border: 5px solid #36f0f0;
+      border-radius: 70px;
+      padding: 3.5rem;
+      z-index: 5000;
+      box-shadow: 0 0 250px cyan;
+      visibility: hidden;
+      opacity: 0;
+      transition: 0.5s;
+      color: white;
+    }
+
+    .project-detail-modal.show {
+      visibility: visible;
+      opacity: 1;
+      transform: translate(-50%, -50%) rotateY(0deg) scale(1);
+    }
+
+    .project-detail-modal h2 {
+      font-size: 3.5rem;
+      color: #bfffff;
+      border-bottom: 6px solid #2bc2c2;
+      display: inline-block;
+      margin-bottom: 2rem;
+    }
+
+    /* Slider Container */
+    .slider-container {
+      position: relative;
+      width: 100%;
+      height: 500px;
+      margin: 2rem 0;
+      overflow: hidden;
+      border-radius: 40px;
+      background: #1a3a40;
+      box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
+    }
+
+    .slider-track {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+      height: 100%;
+    }
+
+    .slider-slide {
+      min-width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, #1f5a5a, #0e4040);
+      padding: 1.5rem;
+    }
+
+    /* Image Styling */
+    .slider-image {
+      width: auto;
+      height: auto;
+      max-width: 90%;
+      max-height: 350px;
+      object-fit: contain;
+      border-radius: 30px;
+      border: 4px solid #2bc2c2;
+      box-shadow: 0 0 50px cyan;
+      margin-bottom: 1.5rem;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: zoom-in;
+      display: block;
+    }
+
+    .slider-image:hover {
+      transform: scale(1.3);
+      box-shadow: 0 0 80px cyan;
+      border-color: white;
+      z-index: 100;
+    }
+
+    /* Video Styling */
+    .slider-video {
+      width: auto;
+      height: auto;
+      max-width: 90%;
+      max-height: 350px;
+      border-radius: 30px;
+      border: 4px solid #2bc2c2;
+      box-shadow: 0 0 50px cyan;
+      margin-bottom: 1.5rem;
+      cursor: pointer;
+    }
+
+    .slider-video:hover {
+      box-shadow: 0 0 80px cyan;
+      border-color: white;
+    }
+
+    .slider-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #bcffff;
+      margin-bottom: 0.5rem;
+      text-align: center;
+      text-shadow: 0 0 20px cyan;
+    }
+
+    .slider-caption {
+      font-size: 1.2rem;
+      color: #acebeb;
+    }
+
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+      background: rgba(43, 194, 194, 0.3);
+      border: 2px solid #2bc2c2;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.8rem;
+      cursor: pointer;
+      transition: 0.2s;
+      z-index: 20;
+      backdrop-filter: blur(5px);
+    }
+
+    .slider-btn:hover {
+      background: #2bc2c2;
+      color: #021013;
+      box-shadow: 0 0 30px cyan;
+    }
+
+    .slider-btn.prev {
+      left: 20px;
+    }
+
+    .slider-btn.next {
+      right: 20px;
+    }
+
+    .slider-dots {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+      z-index: 15;
+    }
+
+    .slider-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #4a6a6a;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .slider-dot.active {
+      background: #2bc2c2;
+      transform: scale(1.3);
+      box-shadow: 0 0 15px cyan;
+    }
+
+    .project-full-desc {
+      margin-top: 2rem;
+      padding: 2rem;
+      background: rgba(20, 80, 80, 0.3);
+      border-radius: 40px;
+    }
+
+    .project-full-desc p {
+      font-size: 1.4rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      color: #e0ffff;
+    }
+
+    .project-languages {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .lang-badge {
+      background: rgba(43, 194, 194, 0.15);
+      border: 1px solid #2bc2c2;
+      padding: 0.6rem 1.4rem;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      color: #e0ffff;
+    }
+
+    .close-modal-btn {
+      margin-top: 2rem;
+      background: #2bc2c2;
+      border: none;
+      padding: 1.5rem;
+      font-size: 1.6rem;
+      font-weight: 900;
+      border-radius: 60px;
+      cursor: pointer;
+      width: 100%;
+      color: #021013;
+      transition: 0.2s;
+      z-index: 15;
+    }
+
+    .close-modal-btn:hover {
+      background: cyan;
+      box-shadow: 0 0 40px cyan;
+    }
+
+    /* ========== PROFILE ========== */
+    .profile-pic-3d {
+      width: 130px;
+      height: 130px;
+      border-radius: 35px;
+      object-fit: cover;
+      border: 6px solid white;
+      box-shadow: 0 0 80px #00ffff;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: all 0.5s;
+    }
+
+    .profile-pic-3d.zoomed {
+      width: 300px;
+      height: 300px;
+      border-radius: 60px;
+      box-shadow: 0 0 150px cyan;
+      transform: scale(1.1) rotateY(10deg) rotateX(5deg);
+      z-index: 100;
+    }
+
+    .profile-laptop-3d {
+      position: relative;
+      width: 500px;
+      height: 320px;
+      background: linear-gradient(145deg, #1f5a5a, #0e4040);
+      border-radius: 50px 50px 25px 25px;
+      transform: rotateY(8deg) rotateX(6deg);
+      box-shadow: 0 70px 120px rgba(0, 220, 220, 0.5);
+      border: 5px solid #aaffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: laptopFloat 8s infinite alternate;
+    }
+
+    @keyframes laptopFloat {
+      0% { transform: rotateY(8deg) rotateX(6deg) translateY(0px); }
+      100% { transform: rotateY(12deg) rotateX(10deg) translateY(-20px); }
+    }
+
+    .laptop-screen {
+      width: 90%;
+      height: 80%;
+      background: linear-gradient(145deg, #0e282c, #0a1e20);
+      border-radius: 35px;
+      border: 5px solid #2bc2c2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ========== PROJECT CARDS ========== */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+      margin-top: 3rem;
+    }
+
+    .project-card-3d {
+      background: rgba(8, 50, 55, 0.8);
+      backdrop-filter: blur(14px);
+      border: 2px solid #2bc2c2;
+      border-radius: 60px;
+      padding: 2rem;
+      transition: 0.5s;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .project-card-3d:hover {
+      transform: translateY(-15px) scale(1.05);
+      box-shadow: 0 0 100px cyan;
+    }
+
+    .project-img {
+      width: 100%;
+      height: 150px;
+      background: linear-gradient(145deg, #1a6a6a, #0e4a4a);
+      border-radius: 40px;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      color: white;
+      border: 3px solid #7ff3f3;
+    }
+
+    /* ========== ABOUT PAGE ========== */
+    .about-professional {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 3rem;
+      margin-top: 2rem;
+    }
+
+    .about-card {
+      background: rgba(10, 55, 60, 0.35);
+      backdrop-filter: blur(20px);
+      border: 2px solid #2bc2c2;
+      border-radius: 60px;
+      padding: 2.5rem;
+    }
+
+    .about-card h3 {
+      font-size: 2.2rem;
+      color: #b3ffff;
+      margin-bottom: 1.5rem;
+      border-left: 6px solid #2bc2c2;
+      padding-left: 1.2rem;
+    }
+
+    .education-highlight {
+      background: rgba(43, 194, 194, 0.1);
+      padding: 1.5rem;
+      border-radius: 30px;
+      margin: 1.5rem 0;
+      border: 1px solid #2bc2c2;
+    }
+
+    .education-highlight .cgpa {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #a0ffff;
+    }
+
+    .leadership-item {
+      background: rgba(43, 194, 194, 0.05);
+      padding: 1.5rem;
+      border-radius: 30px;
+      margin: 1rem 0;
+      border-left: 6px solid #2bc2c2;
+    }
+
+    /* ========== TYPOGRAPHY ========== */
+    .nordic-hello {
+      font-size: 1.6rem;
+      letter-spacing: 20px;
+      color: #7ae9e9;
+      font-weight: 800;
+    }
+
+    h1 {
+      font-size: 7.5rem;
+      font-weight: 900;
+      color: #f0ffff;
+    }
+
+    .btn-nordic {
+      border: 5px solid #2bc2c2;
+      background: transparent;
+      padding: 1.5rem 4.5rem;
+      font-weight: 900;
+      font-size: 1.5rem;
+      letter-spacing: 10px;
+      color: #e0ffff;
+      cursor: pointer;
+      border-radius: 60px;
+      transition: 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-nordic:hover {
+      background: #2bc2c2;
+      color: #021013;
+      box-shadow: 0 0 90px cyan;
+    }
+
+    /* ========== CONTACT ========== */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 4rem;
+      margin-top: 2rem;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .contact-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .contact-label {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #7ae9e9;
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-value {
+      font-size: 2rem;
+      font-weight: 500;
+      color: white;
+      text-decoration: none;
+      border-bottom: 2px solid #2bc2c2;
+      padding-bottom: 0.3rem;
+      display: inline-block;
+      width: fit-content;
+    }
+
+    .contact-value:hover {
+      color: #2bc2c2;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .social-icons a {
+      color: white;
+      font-size: 2.8rem;
+      transition: 0.2s;
+    }
+
+    .social-icons a:hover {
+      color: #2bc2c2;
+      transform: scale(1.2);
+    }
+
+    .contact-form input, .contact-form textarea {
+      width: 100%;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      background: rgba(20, 90, 90, 0.5);
+      border: 3px solid #2bc2c2;
+      color: white;
+      border-radius: 70px;
+      font-size: 1.6rem;
+    }
+
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+    hr { border-top: 3px solid #2ba8a8; margin: 4rem 0; }
+
+    /* Animations */
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(50px, 50px); }
+    }
+
+    @keyframes shapeFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(100px, 50px) scale(1.2); }
+      50% { transform: translate(50px, 200px) scale(0.8); }
+      75% { transform: translate(-50px, 100px) scale(1.1); }
+    }
+
+    @keyframes cursorPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 0.5; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Particle Canvas -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- 3D Cursor -->
+  <div class="cursor-3d"></div>
+
+  <!-- Floating 3D Shapes -->
+  <div class="floating-shape-3d shape-1"></div>
+  <div class="floating-shape-3d shape-2"></div>
+  <div class="floating-shape-3d shape-3"></div>
+
+  <!-- HAMBURGER & SETTINGS -->
+  <div class="hamburger-btn" id="hamburgerBtn"><i class="fas fa-cube"></i></div>
+  <div class="settings-btn" id="settingsBtn"><i class="fas fa-cog"></i></div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="close-sidebar" id="closeSidebar"><i class="fas fa-times"></i></div>
+    <div class="sidebar-logo">IQ</div>
+    <ul class="sidebar-menu">
+      <li data-page="home"><i class="fas fa-home"></i> HOME</li>
+      <li data-page="about"><i class="fas fa-user"></i> ABOUT</li>
+      <li data-page="skills"><i class="fas fa-microchip"></i> SKILLS</li>
+      <li data-page="projects"><i class="fas fa-laptop-code"></i> PROJECTS</li>
+      <li data-page="contact"><i class="fas fa-envelope"></i> CONTACT</li>
+    </ul>
+  </div>
+
+  <!-- SETTINGS PANEL -->
+  <div class="settings-panel" id="settingsPanel">
+    <h3>🎨 ULTIMATE THEME STUDIO</h3>
+    
+    <div>
+      <h4 style="margin-bottom:1rem;">🌑 DARK BACKGROUNDS</h4>
+      <div class="color-grid" id="darkBgGrid"></div>
+    </div>
+    <div>
+      <h4 style="margin-bottom:1rem;">🌕 LIGHT BACKGROUNDS</h4>
+      <div class="color-grid" id="lightBgGrid"></div>
+    </div>
+    <div>
+      <h4 style="margin-bottom:1rem;">📝 DARK TEXT</h4>
+      <div class="color-grid" id="darkTextGrid"></div>
+    </div>
+    <div>
+      <h4 style="margin-bottom:1rem;">📄 LIGHT TEXT</h4>
+      <div class="color-grid" id="lightTextGrid"></div>
+    </div>
+    <div>
+      <h4 style="margin-bottom:1rem;">🔤 FONTS</h4>
+      <div class="font-grid" id="fontGrid"></div>
+    </div>
+    <button class="close-settings-btn" id="closeSettings">APPLY & CLOSE</button>
+  </div>
+
+  <!-- SKILL MODAL -->
+  <div class="skill-modal-3d" id="skillModal3D">
+    <h2>⚡ NORDIC SKILLS</h2>
+    <div class="skill-grid-3d">
+      <div class="skill-cube">
+        <h3>WEB</h3>
+        <ul><li>HTML5</li><li>CSS3</li><li>JavaScript</li><li>PHP</li><li>MySQL</li></ul>
+      </div>
+      <div class="skill-cube">
+        <h3>MOBILE</h3>
+        <ul><li>Flutter</li><li>Dart</li><li>Responsive UI</li></ul>
+      </div>
+      <div class="skill-cube">
+        <h3>LANGUAGES</h3>
+        <ul><li>C++</li><li>Python</li><li>Java</li></ul>
+      </div>
+      <div class="skill-cube">
+        <h3>DESIGN</h3>
+        <ul><li>Canva</li><li>Figma</li></ul>
+      </div>
+    </div>
+    <button class="close-modal-btn" id="closeSkillModal3D">CLOSE</button>
+  </div>
+
+  <!-- PROJECT MODAL WITH SLIDER -->
+  <div class="project-detail-modal" id="projectDetailModal">
+    <h2 id="projectModalTitle">Project</h2>
+    
+    <!-- Image/Video Slider -->
+    <div class="slider-container">
+      <div class="slider-track" id="sliderTrack"></div>
+      <div class="slider-btn prev" id="sliderPrev"><i class="fas fa-chevron-left"></i></div>
+      <div class="slider-btn next" id="sliderNext"><i class="fas fa-chevron-right"></i></div>
+    </div>
+    <div class="slider-dots" id="sliderDots"></div>
+
+    <!-- Description -->
+    <div class="project-full-desc">
+      <p id="projectFullDesc"></p>
+      <div class="project-languages" id="projectAllLanguages"></div>
+    </div>
+    
+    <button class="close-modal-btn" id="closeProjectDetailModal">CLOSE</button>
+  </div>
+
+  <!-- MAIN PAGE -->
+  <div class="page" id="pageContainer">
+    <!-- HOME -->
+    <div id="home-page" class="page-section active">
+      <div class="nordic-hello">❄️ Software Engineer</div>
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;">
+        <div>
+          <h1>Iqra Bibi</h1>
+          <div style="font-size:2.8rem; font-weight:700; color:#b3ffff;">
+             Web & App Developer</div>
+          <div style="margin:2rem 0;">
+            <span style="color:#b3ffff; font-size:1.8rem;"><i class="fas fa-map-marker-alt"></i> Hazro, Kamra - Attock, Pakistan</span>
+          </div>
+          <div style="margin:3rem 0 2rem;">
+            <span style="border-bottom:6px solid #2bc2c2; padding-bottom:0.8rem; font-size:2rem; letter-spacing:12px; color:#aaffff;">FROM THE INSIDE OUT</span>
+          </div>
+          <div style="display:flex; gap:2rem;">
+            <a href="#" class="btn-nordic" id="downloadCVBtn">⟁ CV</a>
+            <a href="#" class="btn-nordic" id="mySkillsBtn">⧉ SKILLS</a>
+          </div>
+        </div>
+        
+        <!-- LAPTOP WITH PHOTO -->
+        <div class="profile-laptop-3d">
+          <div class="laptop-screen">
+            <img src="iqra.jpg" alt="Iqra" class="profile-pic-3d" onclick="toggleZoom(this)" onerror="this.style.display='none'; this.parentElement.innerHTML += '<div class=\'profile-pic-fallback\' style=\'width:130px;height:130px;background:#279b9b;border-radius:35px;display:flex;align-items:center;justify-content:center;font-size:5rem;color:white;\' onclick=\'toggleZoom(this)\'>IQ</div>';">
+            <h2 style="font-size:2.4rem; color:#bcffff;">IQRA BIBI</h2>
+            <div style="color:#acebeb; font-size:1.4rem; letter-spacing:8px;">Software Engineer</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; gap:6rem; margin:4rem 0;">
+        <div style="background:rgba(30,100,100,0.3); border:2px solid #2bc2c2; padding:2rem 3.5rem; border-radius:60px;"><span style="font-size:5.5rem; font-weight:900;">12+</span><br><span style="letter-spacing:8px;">PROJECTS</span></div>
+        <div style="background:rgba(30,100,100,0.3); border:2px solid #2bc2c2; padding:2rem 3.5rem; border-radius:60px;"><span style="font-size:5.5rem; font-weight:900;">4+</span><br><span style="letter-spacing:8px;">MONTHS EXP</span></div>
+        <div style="background:rgba(30,100,100,0.3); border:2px solid #2bc2c2; padding:2rem 3.5rem; border-radius:60px;"><span style="font-size:5.5rem; font-weight:900;">3.4</span><br><span style="letter-spacing:8px;">CGPA</span></div>
+      </div>
+      <hr>
+    </div>
+
+    <!-- ABOUT - MERGED WITH SAGA -->
+    <div id="about-page" class="page-section">
+      <div class="nordic-hello">ABOUT</div>
+      <div class="about-professional">
+        <div>
+          <div class="profile-laptop-3d" style="width:100%; height:280px;">
+            <div class="laptop-screen">
+              <img src="iqra.jpg" alt="Iqra" class="profile-pic-3d" style="width:100px; height:100px;" onclick="toggleZoom(this)">
+            </div>
+          </div>
+          <div class="about-card" style="margin-top:2rem;">
+            <h3>Mission</h3>
+            <p>Crafting scalable, user-focused web and app solutions.</p>
+          </div>
+        </div>
+        
+        <div>
+          <!-- EDUCATION -->
+          <div class="about-card" style="margin-bottom:2rem;">
+            <h3>Education</h3>
+            <p style="font-size:1.8rem; font-weight:600;">BSSE · Pak-Austria FH</p>
+            <p>6th semester</p>
+            <div class="education-highlight">
+              <span class="cgpa">CGPA 3.4/4.0</span>
+            </div>
+            <p style="margin-top:1rem;">FSC · Govt Girls College Hazro</p>
+          </div>
+
+          <!-- LEADERSHIP -->
+          <div class="about-card">
+            <h3>Leadership</h3>
+            <div class="leadership-item">
+              <p style="font-weight:600;">Team Leadership</p>
+              <p>Led software development teams to design and deliver innovative solutions.
+Focused on creating scalable, impactful software that meets user and business needs.</p>
+            </div>
+            <div class="leadership-item">
+              <p style="font-weight:600;">Mentorship</p>
+              <p>Mentored junior developers to strengthen their technical skills and problem-solving abilities. Guided teams to adopt best practices and improve overall code quality.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECTS -->
+    <div id="projects-page" class="page-section">
+      <div class="nordic-hello">PROJECTS</div>
+      <h1 style="font-size:5rem;">CREATIONS</h1>
+      <div class="project-grid">
+        <div class="project-card-3d" data-project="lms">
+          <div class="project-img">🏛️</div>
+          <h3>LMS Portal</h3>
+        </div>
+        <div class="project-card-3d" data-project="restaurant">
+          <div class="project-img">🍽️</div>
+          <h3>Restaurant App</h3>
+        </div>
+        <div class="project-card-3d" data-project="game">
+          <div class="project-img">🎮</div>
+          <h3>Web Game</h3>
+        </div>
+        <div class="project-card-3d" data-project="cafe">
+          <div class="project-img">☕</div>
+          <h3>Café System</h3>
+        </div>
+        <div class="project-card-3d" data-project="intern">
+          <div class="project-img">💼</div>
+          <h3>Internship Mgmt</h3>
+        </div>
+        <div class="project-card-3d" data-project="canva">
+          <div class="project-img">🎨</div>
+          <h3>Calculator App</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div id="contact-page" class="page-section">
+      <div class="nordic-hello">CONTACT</div>
+      <h1 style="font-size:4.5rem;">CONNECT NORDIC</h1>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <!-- CALL -->
+          <div class="contact-item">
+            <span class="contact-label">CALL</span>
+            <a href="tel:+923278643682" class="contact-value">+92 327 8643682</a>
+          </div>
+          
+          <!-- WHATSAPP -->
+          <div class="contact-item">
+            <span class="contact-label">WHATSAPP</span>
+            <a href="https://wa.me/923278643682" class="contact-value">Chat on WhatsApp</a>
+          </div>
+          
+          <!-- EMAIL -->
+          <div class="contact-item">
+            <span class="contact-label">EMAIL</span>
+            <a href="mailto:bibiqra930@gmail.com" class="contact-value">bibiqra930@gmail.com</a>
+          </div>
+          
+          <!-- LinkedIn -->
+          <div class="social-icons">
+            <a href="https://www.linkedin.com/in/qra-bibi-906993312" target="_blank"><i class="fab fa-linkedin"></i></a>
+          </div>
+        </div>
+        
+        <div class="contact-form">
+          <form id="contactForm">
+            <input type="text" id="name" placeholder="YOUR NAME" required>
+            <input type="email" id="email" placeholder="YOUR EMAIL" required>
+            <input type="text" id="subject" placeholder="SUBJECT" required>
+            <textarea id="message" rows="4" placeholder="YOUR MESSAGE" required></textarea>
+            <div style="margin:2rem 0;">
+              <input type="checkbox" id="terms" required> <label for="terms">ACCEPT TERMS</label>
+            </div>
+            <button type="submit" class="btn-nordic" style="width:100%;">SEND MESSAGE</button>
+          </form>
+          <div id="formStatus" style="margin-top:2rem;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ========== TOGGLE ZOOM ==========
+    function toggleZoom(element) {
+      element.classList.toggle('zoomed');
+    }
+
+    // ========== COLORS DATA ==========
+    const darkBgColors = ['#0a181c', '#1a2c3c', '#0e2a2f', '#1e3a40', '#0f3a40', '#1a4a4a', '#0e4040', '#1f5a5a', '#0a2a2f'];
+    const lightBgColors = ['#f0f9fa', '#e0f0f5', '#d0eaf0', '#e5f5f5', '#f5fafa', '#e8f0f0', '#d5e8e8', '#c0e0e0', '#f0f5f5'];
+    const darkTextColors = ['#eaf6f8', '#b0ffff', '#a0ffff', '#b3ffff', '#ceffff', '#d0ffff', '#e0ffff', '#c0ffff', '#d6f7ff'];
+    const lightTextColors = ['#1a2c3c', '#0a3740', '#1e3a40', '#1a5858', '#0e4a4a', '#1f5a5a', '#0a2c38', '#1a4a4a', '#0e4040'];
+
+    const fontFamilies = [
+      { name: 'INTER', value: "'Inter', sans-serif" },
+      { name: 'FIRACODE', value: "'Fira Code', monospace" },
+      { name: 'CLASH', value: "'Clash Display', sans-serif" },
+      { name: 'SPACE', value: "'Space Grotesk', sans-serif" },
+      { name: 'MONTSERRAT', value: "'Montserrat', sans-serif" },
+      { name: 'POPPINS', value: "'Poppins', sans-serif" },
+      { name: 'PLAYFAIR', value: "'Playfair Display', serif" },
+      { name: 'ROBOTO', value: "'Roboto Mono', monospace" },
+      { name: 'ORBITRON', value: "'Orbitron', sans-serif" }
+    ];
+
+    // ========== POPULATE SETTINGS ==========
+    function createColorGrid(containerId, colors, type) {
+      const container = document.getElementById(containerId);
+      colors.forEach(color => {
+        const dot = document.createElement('div');
+        dot.className = 'color-dot';
+        dot.style.background = color;
+        dot.dataset[type] = color;
+        container.appendChild(dot);
+      });
+    }
+
+    createColorGrid('darkBgGrid', darkBgColors, 'bg');
+    createColorGrid('lightBgGrid', lightBgColors, 'bg');
+    createColorGrid('darkTextGrid', darkTextColors, 'text');
+    createColorGrid('lightTextGrid', lightTextColors, 'text');
+
+    const fontGrid = document.getElementById('fontGrid');
+    fontFamilies.forEach(font => {
+      const option = document.createElement('div');
+      option.className = 'font-option';
+      option.textContent = font.name;
+      option.dataset.font = font.value;
+      option.addEventListener('click', function() {
+        document.querySelectorAll('.font-option').forEach(opt => opt.classList.remove('selected'));
+        this.classList.add('selected');
+        document.body.style.fontFamily = this.dataset.font;
+      });
+      fontGrid.appendChild(option);
+    });
+
+    // ========== EMAILJS ==========
+    emailjs.init("VD-33eJyxmUpd8pX9");
+
+    // ========== SIDEBAR NAVIGATION ==========
+    const sidebar = document.getElementById('sidebar');
+    document.getElementById('hamburgerBtn').addEventListener('click', () => sidebar.classList.add('open'));
+    document.getElementById('closeSidebar').addEventListener('click', () => sidebar.classList.remove('open'));
+
+    const sections = document.querySelectorAll('.page-section');
+    function activatePage(pageId) {
+      sections.forEach(s => s.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+      sidebar.classList.remove('open');
+    }
+
+    document.querySelectorAll('.sidebar-menu li').forEach(item => {
+      item.addEventListener('click', function() {
+        const page = this.dataset.page;
+        if (page === 'home') activatePage('home-page');
+        if (page === 'about') activatePage('about-page');
+        if (page === 'skills') document.getElementById('skillModal3D').classList.add('show');
+        if (page === 'projects') activatePage('projects-page');
+        if (page === 'contact') activatePage('contact-page');
+      });
+    });
+
+    // ========== SETTINGS ==========
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsPanel = document.getElementById('settingsPanel');
+    const closeSettings = document.getElementById('closeSettings');
+    settingsBtn.addEventListener('click', () => settingsPanel.classList.add('show'));
+    closeSettings.addEventListener('click', () => settingsPanel.classList.remove('show'));
+
+    document.querySelectorAll('.color-dot[data-bg]').forEach(dot => {
+      dot.addEventListener('click', function() {
+        document.body.style.background = this.dataset.bg;
+      });
+    });
+
+    document.querySelectorAll('.color-dot[data-text]').forEach(dot => {
+      dot.addEventListener('click', function() {
+        document.body.style.color = this.dataset.text;
+      });
+    });
+
+    // ========== SKILLS MODAL ==========
+    const skillModal = document.getElementById('skillModal3D');
+    const mySkillsBtn = document.getElementById('mySkillsBtn');
+    const closeSkillModal = document.getElementById('closeSkillModal3D');
+    
+    mySkillsBtn.addEventListener('click', (e) => { 
+      e.preventDefault(); 
+      skillModal.classList.add('show'); 
+    });
+    
+    closeSkillModal.addEventListener('click', () => { 
+      skillModal.classList.remove('show'); 
+    });
+
+    // ========== PROJECT DETAILS (VIDEOS REMOVED) ==========
+    const projectDetailModal = document.getElementById('projectDetailModal');
+    const closeProjectDetail = document.getElementById('closeProjectDetailModal');
+    let currentSlide = 0;
+    let slideItems = [];
+
+    const projectDetails = {
+      lms: {
+        title: 'LMS Portal',
+        desc: "Designed and implemented a University Learning Management System integrating PHP for backend logic, MySQL and MongoDB for hybrid database management, and HTML, CSS, and JavaScript for a responsive, interactive dashboard interface.",
+        images: [
+          '1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', '7.jpeg', '8.jpeg', '9.jpeg', '10.jpeg',
+          '11.jpeg', '12.jpeg', '13.jpeg', '14.jpeg', '15.jpeg', '16.jpeg', '17.jpeg', '18.jpeg', '19.jpeg', '20.jpeg',
+          '21.jpeg', '22.jpeg', '23.jpeg', '24.jpeg', '25.jpeg'
+        ],
+        imageNames: [
+          'Login Form','Login Form ', 'Dashboard','Dashboard','Profile','Courses','Courses', 'Attendance','Attendance','Assignments', 
+          'FeedBack Survey','Fee Record', 'Notice Board','Project Management','Project Management','My Exam','Student Promotion Sysem',
+          'University Library System','University Library System','University Library System','University Library System',
+          'My Application','My Application','secure Document Upload','secure Document Upload'
+        ],
+        languages: ['PHP', 'MySQL', 'Bootstrap', 'JavaScript', 'HTML5', 'CSS3']
+      },
+      restaurant: {
+        title: 'Restaurant App',
+        desc: "Designed and implemented a Flutter cross-platform frontend integrating dynamic UI components, interactive menus, and smooth navigation transitions, ensuring consistent performance across Android, iOS, and web platforms.",
+        images: [
+          'g.png', 'h.png', 'i.png', 'n.png', 'j.png',
+          'k.png', 'l.png', 'm.png', 
+        ],
+        imageNames: ['Menu Screen', 'Order Details', 'Shopping Cart', 'User Profile', 'User Profile', 'User Profile', 'User Profile'],
+        languages: ['Flutter', 'Dart', 'Material Design']
+      },
+      game: {
+        title: 'Web Game',
+        desc: 'Interactive browser-based game with JavaScript logic and custom UI.',
+        images: [
+          'game1.png', 'game2.png', 'game3.png', 'game4.png','game5.png'
+        ],
+        imageNames: [
+          'Gameplay Screenshot 1',
+          'Gameplay Screenshot 2', 
+          'Gameplay Screenshot 3', 
+          'Gameplay Screenshot 4',
+          'Gameplay Screenshot 5'
+        ],
+        languages: ['HTML5', 'CSS3', 'JavaScript', 'Canvas API']
+      },
+      cafe: {
+        title: 'Sip and Savor Café System',
+        desc: 'Python CLI "Designed and implemented a web application for order processing, billing, and inventory management using HTML, CSS, and JavaScript with responsive layouts and dynamic client-side functionality."system for orders, billing, and inventory tracking.',
+        images: [
+          'image1.png', 'image2.png', 'image3.png', 'image4.png','image5.png', 'image6.png',
+        ],
+        imageNames: ['Home Screen','Menu','About Us', 'Client Reviews', 'Contact Us','Additional Details'],
+        languages: ['Html', 'CSS', 'JavaScript']
+      },
+      intern: {
+        title: 'Internship Management',
+        desc: 'A web application that connects students with internship opportunities, allowing full CRUD operations for student profiles, company postings, and applications.',
+        images: [
+          'intern2.png', 'intern3.png', 'intern4.png','intern5.png','intern6.png','intern7.png'
+        ],
+        imageNames: [
+          'Dashboard', 
+          'Dashboard', 
+          "internship listing",
+          'mentor management',
+          'project management',
+          'Analytics',
+          'Reports'
+        ],
+        languages: ['PHP', 'MySQL', 'python', 'Flask']
+      },
+      canva: {
+        title: 'Calculator App',
+        desc: 'A multi-functional Flutter calculator app offering over 10 tools, including a BMI calculator, currency converter, and scientific calculator.It features a modern, responsive UI with smooth navigation between calculators.Designed for accuracy, speed, and an intuitive user experience across all devices.',
+        images: [
+          'a.jpg', 'b.jpg', 'c.jpg', 'd.jpg', 'e.jpg', 'f.jpg'
+        ],
+        imageNames: [
+          'Simple Calculator',
+          'Scientific Calculator',
+          'BMI Calculator',
+          'Currency Converter',
+          'Unit Converter',
+          'Tip Calculator'
+        ],
+        languages: ['Dart', 'Flutter', 'JavaScript (Backend)']
+      }
+    };
+
+    function updateSlider() {
+      const track = document.getElementById('sliderTrack');
+      const dots = document.getElementById('sliderDots');
+      
+      if (track && slideItems.length > 0) {
+        track.style.transform = `translateX(-${currentSlide * 100}%)`;
+      }
+      
+      if (dots) {
+        dots.innerHTML = '';
+        slideItems.forEach((_, index) => {
+          const dot = document.createElement('span');
+          dot.className = `slider-dot ${index === currentSlide ? 'active' : ''}`;
+          dot.addEventListener('click', () => {
+            currentSlide = index;
+            updateSlider();
+          });
+          dots.appendChild(dot);
+        });
+      }
+    }
+
+    document.querySelectorAll('.project-card-3d').forEach(card => {
+      card.addEventListener('click', function() {
+        const key = this.dataset.project;
+        const project = projectDetails[key];
+        
+        if (project) {
+          document.getElementById('projectModalTitle').textContent = project.title;
+          document.getElementById('projectFullDesc').textContent = project.desc;
+          
+          slideItems = project.images;
+          currentSlide = 0;
+          
+          const track = document.getElementById('sliderTrack');
+          if (track) {
+            track.innerHTML = '';
+            project.images.forEach((item, index) => {
+              const slide = document.createElement('div');
+              slide.className = 'slider-slide';
+              
+              // Only images now (videos removed)
+              const img = document.createElement('img');
+              img.className = 'slider-image';
+              img.src = item;
+              img.alt = project.imageNames[index] || `Picture ${index + 1}`;
+              img.onerror = function() {
+                this.src = 'https://via.placeholder.com/500x350/1a3a40/2bc2c2?text=Image+Not+Found';
+              };
+              
+              const title = document.createElement('div');
+              title.className = 'slider-title';
+              title.textContent = project.imageNames[index] || `Screenshot ${index + 1}`;
+              
+              const caption = document.createElement('div');
+              caption.className = 'slider-caption';
+              caption.textContent = `Picture ${index + 1}/${project.images.length}`;
+              
+              slide.appendChild(img);
+              slide.appendChild(title);
+              slide.appendChild(caption);
+              
+              track.appendChild(slide);
+            });
+          }
+          
+          const langContainer = document.getElementById('projectAllLanguages');
+          if (langContainer) {
+            langContainer.innerHTML = '';
+            project.languages.forEach(lang => {
+              const badge = document.createElement('span');
+              badge.className = 'lang-badge';
+              badge.textContent = lang;
+              langContainer.appendChild(badge);
+            });
+          }
+          
+          updateSlider();
+          projectDetailModal.classList.add('show');
+        }
+      });
+    });
+
+    document.getElementById('sliderPrev').addEventListener('click', () => {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlider();
+      }
+    });
+
+    document.getElementById('sliderNext').addEventListener('click', () => {
+      if (currentSlide < slideItems.length - 1) {
+        currentSlide++;
+        updateSlider();
+      }
+    });
+
+    closeProjectDetail.addEventListener('click', () => {
+      projectDetailModal.classList.remove('show');
+      
+      const videos = document.querySelectorAll('.slider-video');
+      videos.forEach(video => video.pause());
+    });
+
+    // ========== CONTACT FORM ==========
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const subject = document.getElementById('subject').value;
+      const message = document.getElementById('message').value;
+      
+      const statusEl = document.getElementById('formStatus');
+      statusEl.innerHTML = '⏳ Sending...';
+      
+      emailjs.send("service_a7yp7rj", "template_einj597", {
+        from_name: name,
+        from_email: email,
+        subject: subject,
+        message: message
+      }).then(() => {
+        statusEl.innerHTML = '✅ Message sent!';
+        document.getElementById('contactForm').reset();
+      }, () => {
+        statusEl.innerHTML = '❌ Failed to send.';
+      });
+    });
+
+    // ========== CV DOWNLOAD ==========
+    document.getElementById('downloadCVBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      const cvPath = "Iqra bibi (1).pdf";
+      
+      const link = document.createElement('a');
+      link.href = cvPath;
+      link.download = 'Iqra bibi(1).pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    // ========== PARTICLE SYSTEM ==========
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const particleCount = 100;
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 2,
+        vy: (Math.random() - 0.5) * 2,
+        size: Math.random() * 2,
+        color: `rgba(0, 255, 157, ${Math.random() * 0.5})`
+      });
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+        
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+        
+        particles.forEach(p2 => {
+          const dx = p.x - p2.x;
+          const dy = p.y - p2.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 100) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(0, 255, 157, ${0.2 * (1 - distance / 100)})`;
+            ctx.lineWidth = 0.5;
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        });
+      });
+      
+      requestAnimationFrame(animateParticles);
+    }
+
+    animateParticles();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // ========== 3D CURSOR ==========
+    const cursor = document.querySelector('.cursor-3d');
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+  </script>
+</body>
+</html>
