@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Iqra Bibi · Web Developer · Flutter Developer</title>
   <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -94,7 +94,7 @@
       animation-delay: -10s;
     }
 
-    /* 3D Cursor */
+    /* 3D Cursor - Hide on mobile */
     .cursor-3d {
       width: 30px;
       height: 30px;
@@ -122,7 +122,7 @@
       box-shadow: 0 0 20px var(--accent);
     }
 
-    /* ========== NORDIC STYLES (SAME) ========== */
+    /* ========== NORDIC STYLES ========== */
     * {
       margin: 0;
       padding: 0;
@@ -138,7 +138,7 @@
       transition: background 0.4s, color 0.3s, font-family 0.3s;
     }
 
-    /* 3D Canvas - Disabled (using cyberpunk background instead) */
+    /* 3D Canvas - Disabled */
     #canvas-container {
       display: none;
     }
@@ -935,6 +935,240 @@
       0%, 100% { transform: scale(1); opacity: 1; }
       50% { transform: scale(1.5); opacity: 0.5; }
     }
+
+    /* ========== RESPONSIVE DESIGN - MOBILE FIXES ========== */
+    @media screen and (max-width: 768px) {
+      /* Hide 3D cursor on mobile */
+      .cursor-3d {
+        display: none;
+      }
+
+      /* Adjust page padding */
+      .page {
+        padding: 1.5rem 1rem;
+        border-radius: 40px 40px 0 0;
+      }
+
+      /* Fix home section */
+      #home-page > div:first-of-type {
+        flex-direction: column !important;
+        gap: 2rem !important;
+      }
+
+      /* Fix headings */
+      h1 {
+        font-size: 3.5rem !important;
+      }
+
+      .nordic-hello {
+        font-size: 1.2rem;
+        letter-spacing: 10px;
+      }
+
+      /* Fix laptop 3D */
+      .profile-laptop-3d {
+        width: 100% !important;
+        height: 250px !important;
+        margin-top: 1rem;
+      }
+
+      /* Fix stats boxes */
+      #home-page > div:last-of-type {
+        flex-direction: column !important;
+        gap: 1.5rem !important;
+      }
+
+      #home-page > div:last-of-type > div {
+        width: 100% !important;
+        padding: 1.5rem 2rem !important;
+      }
+
+      /* Fix about page */
+      .about-professional {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+      }
+
+      /* Fix project grid */
+      .project-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.5rem !important;
+      }
+
+      .project-card-3d {
+        padding: 1rem !important;
+      }
+
+      .project-img {
+        height: 100px !important;
+        font-size: 3rem !important;
+      }
+
+      .project-card-3d h3 {
+        font-size: 1.2rem !important;
+      }
+
+      /* Fix contact grid */
+      .contact-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+      }
+
+      /* Fix hamburger and settings buttons */
+      .hamburger-btn, .settings-btn {
+        width: 60px !important;
+        height: 60px !important;
+        font-size: 2rem !important;
+      }
+
+      .settings-btn {
+        top: 110px !important;
+      }
+
+      /* Fix sidebar */
+      .sidebar {
+        width: 85% !important;
+        left: -100% !important;
+        padding: 2rem 1.5rem !important;
+      }
+
+      .sidebar.open {
+        left: 0 !important;
+      }
+
+      .sidebar-menu li {
+        font-size: 1.5rem !important;
+        padding: 1rem !important;
+      }
+
+      /* Fix settings panel */
+      .settings-panel {
+        width: 95% !important;
+        padding: 1.5rem !important;
+      }
+
+      .settings-panel h3 {
+        font-size: 1.8rem !important;
+      }
+
+      .color-grid {
+        grid-template-columns: repeat(5, 1fr) !important;
+      }
+
+      .font-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+
+      /* Fix project modal */
+      .project-detail-modal {
+        width: 95% !important;
+        padding: 1.5rem !important;
+      }
+
+      .project-detail-modal h2 {
+        font-size: 2rem !important;
+      }
+
+      .slider-container {
+        height: 300px !important;
+      }
+
+      .slider-image {
+        max-height: 200px !important;
+      }
+
+      .slider-title {
+        font-size: 1.4rem !important;
+      }
+
+      .slider-caption {
+        font-size: 0.9rem !important;
+      }
+
+      .slider-btn {
+        width: 35px !important;
+        height: 35px !important;
+        font-size: 1.2rem !important;
+      }
+
+      /* Fix skill modal */
+      .skill-modal-3d {
+        width: 95% !important;
+        padding: 1.5rem !important;
+      }
+
+      .skill-modal-3d h2 {
+        font-size: 2rem !important;
+      }
+
+      .skill-grid-3d {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+      }
+
+      /* Fix contact form */
+      .contact-form input, 
+      .contact-form textarea {
+        padding: 1.2rem !important;
+        font-size: 1.2rem !important;
+      }
+
+      .btn-nordic {
+        padding: 1rem 2rem !important;
+        font-size: 1.2rem !important;
+        letter-spacing: 5px !important;
+      }
+
+      /* Fix about cards */
+      .about-card {
+        padding: 1.5rem !important;
+      }
+
+      .about-card h3 {
+        font-size: 1.6rem !important;
+      }
+
+      /* Fix floating shapes on mobile */
+      .floating-shape-3d {
+        display: none;
+      }
+    }
+
+    /* Small phones */
+    @media screen and (max-width: 480px) {
+      .project-grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      h1 {
+        font-size: 2.8rem !important;
+      }
+
+      .profile-laptop-3d {
+        height: 220px !important;
+      }
+
+      .laptop-screen h2 {
+        font-size: 1.8rem !important;
+      }
+
+      .profile-pic-3d {
+        width: 100px !important;
+        height: 100px !important;
+      }
+
+      .slider-container {
+        height: 250px !important;
+      }
+
+      .contact-label {
+        font-size: 1.4rem !important;
+      }
+
+      .contact-value {
+        font-size: 1.4rem !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1077,7 +1311,7 @@
       <hr>
     </div>
 
-    <!-- ABOUT - MERGED WITH SAGA -->
+    <!-- ABOUT -->
     <div id="about-page" class="page-section">
       <div class="nordic-hello">ABOUT</div>
       <div class="about-professional">
@@ -1110,8 +1344,7 @@
             <h3>Leadership</h3>
             <div class="leadership-item">
               <p style="font-weight:600;">Team Leadership</p>
-              <p>Led software development teams to design and deliver innovative solutions.
-Focused on creating scalable, impactful software that meets user and business needs.</p>
+              <p>Led software development teams to design and deliver innovative solutions. Focused on creating scalable, impactful software that meets user and business needs.</p>
             </div>
             <div class="leadership-item">
               <p style="font-weight:600;">Mentorship</p>
@@ -1540,7 +1773,7 @@ Focused on creating scalable, impactful software that meets user and business ne
     document.getElementById('downloadCVBtn').addEventListener('click', function(e) {
       e.preventDefault();
       
-      const cvPath = "Iqra bibi (1).pdf";
+      const cvPath = "iqra_cv.pdf";
       
       const link = document.createElement('a');
       link.href = cvPath;
@@ -1612,11 +1845,13 @@ Focused on creating scalable, impactful software that meets user and business ne
       canvas.height = window.innerHeight;
     });
 
-    // ========== 3D CURSOR ==========
+    // ========== 3D CURSOR (hide on mobile) ==========
     const cursor = document.querySelector('.cursor-3d');
     document.addEventListener('mousemove', (e) => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
+      if (window.innerWidth > 768) {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+      }
     });
   </script>
 </body>
